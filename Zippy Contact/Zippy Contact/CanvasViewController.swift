@@ -13,30 +13,34 @@ class CanvasViewController: UIViewController {
     private var lastPoint : CGPoint = CGPoint()
     private var swiped = false
     @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var backView: UIView!
+    
+    private var localPoints : [CGPoint] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.setUpView()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     func setUpView() {
-        self.imgView.layer.shadowColor = UIColor.black.cgColor
-        self.imgView.layer.shadowOpacity = 0.48
-        self.imgView.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        self.imgView.layer.shadowRadius = 10
+        self.backView.layer.shadowColor = UIColor.black.cgColor
+        self.backView.layer.shadowOpacity = 0.48
+        self.backView.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        self.backView.layer.shadowRadius = 10
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = false
         if let touch = touches.first {
-            self.lastPoint = touch.location(in: self.view)
+            self.lastPoint = touch.location(in: self.imgView)
+            self.localPoints.append(self.lastPoint)
         }
     }
     
     func drawLines(from: CGPoint, to: CGPoint) {
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        self.imgView.image?.draw(in: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        UIGraphicsBeginImageContext(self.imgView.frame.size)
+        self.imgView.image?.draw(in: CGRect(x: 0, y: 0, width: self.imgView.frame.width, height: self.imgView.frame.height))
         if let context = UIGraphicsGetCurrentContext() {
             context.move(to: CGPoint(x: from.x, y: from.y))
             context.addLine(to: CGPoint(x: to.x, y: to.y))
@@ -59,15 +63,32 @@ class CanvasViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = true
         if let touch = touches.first {
-            var currentPoint = touch.location(in: self.view)
+            var currentPoint = touch.location(in: self.imgView)
             drawLines(from: self.lastPoint, to: currentPoint)
             self.lastPoint = currentPoint
+            self.localPoints.append(self.lastPoint)
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             drawLines(from: lastPoint, to: lastPoint)
+            self.localPoints.append(self.lastPoint)
+        }
+        
+        Util.saveImage(img: self.imgView.image)
+        self.clearCanvas()
+    }
+    
+    func clearCanvas() {
+        self.imgView.alpha = 1.0
+        UIView.animate(withDuration: 0.48, animations: {
+            self.imgView.alpha = 0.0
+        }) { (end) in
+            self.imgView.image = UIImage()
+            UIView.animate(withDuration: 0.48, animations: {
+                self.imgView.alpha = 1.0
+            })
         }
     }
     
