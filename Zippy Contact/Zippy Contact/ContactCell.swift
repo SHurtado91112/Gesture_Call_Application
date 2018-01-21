@@ -46,7 +46,7 @@ class ContactCell: UITableViewCell {
         
         nameLabel.layer.shadowColor = UIColor.black.cgColor
         nameLabel.layer.shadowRadius = 10
-        nameLabel.layer.shadowOpacity = 0.48
+        nameLabel.layer.shadowOpacity = 1.0
         nameLabel.layer.shadowOffset = CGSize(width: 0.0, height: 8.0)
     }
     
