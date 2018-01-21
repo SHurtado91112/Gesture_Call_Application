@@ -17,5 +17,7 @@ Most of our team haven't been exposed to machine learning algorithms or develope
 # Team
 
 Steven Hurtado
+
 Jake Locke
+
 Andrei Gurau
