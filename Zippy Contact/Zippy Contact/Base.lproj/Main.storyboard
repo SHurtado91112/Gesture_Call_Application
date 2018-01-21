@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NNz-vN-fPj">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -19,15 +19,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d2C-oV-ZLX">
-                                <rect key="frame" x="16" y="52" width="343" height="632"/>
+                                <rect key="frame" x="16" y="96" width="343" height="554"/>
                                 <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iQr-aO-SBc">
-                                <rect key="frame" x="16" y="52" width="343" height="632"/>
+                                <rect key="frame" x="16" y="96" width="343" height="554"/>
                                 <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="632" id="fJJ-09-L2k"/>
-                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.71764705882352942" green="0.81960784313725488" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -36,14 +33,14 @@
                             <constraint firstItem="d2C-oV-ZLX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Vr7-Lv-MSZ"/>
                             <constraint firstItem="iQr-aO-SBc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="YSg-qX-JfH"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="iQr-aO-SBc" secondAttribute="trailing" constant="16" id="aOy-sm-tfn"/>
-                            <constraint firstAttribute="bottom" secondItem="iQr-aO-SBc" secondAttribute="bottom" constant="128" id="f49-8A-eFd"/>
-                            <constraint firstAttribute="bottom" secondItem="d2C-oV-ZLX" secondAttribute="bottom" constant="128" id="fdJ-za-4IV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iQr-aO-SBc" secondAttribute="bottom" constant="128" id="f49-8A-eFd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="d2C-oV-ZLX" secondAttribute="bottom" constant="128" id="fdJ-za-4IV"/>
                             <constraint firstItem="d2C-oV-ZLX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="oSE-EK-G1Q"/>
                             <constraint firstItem="iQr-aO-SBc" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="qSQ-i4-Xzh"/>
-                            <constraint firstItem="d2C-oV-ZLX" firstAttribute="height" secondItem="iQr-aO-SBc" secondAttribute="height" id="ut3-bp-gL8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Y17-9A-QVF"/>
                     <connections>
                         <outlet property="backView" destination="d2C-oV-ZLX" id="lUr-bq-gMN"/>
                         <outlet property="imgView" destination="iQr-aO-SBc" id="SC7-8J-71L"/>
@@ -51,7 +48,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="76" y="67.916041979010501"/>
+            <point key="canvasLocation" x="418.39999999999998" y="67.241379310344826"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="s6P-53-LYh">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NNz-vN-fPj" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="xLc-nx-Hxu">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="5rC-pX-PzF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aK6-4J-HZA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="418" y="818"/>
         </scene>
     </scenes>
 </document>
