@@ -47,9 +47,7 @@ class CanvasViewController: UIViewController {
         super.viewDidLoad()
         self.setUpView()
         
-        //use to clear data
-//        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
-//        UserDefaults.standard.synchronize()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -150,8 +148,16 @@ class CanvasViewController: UIViewController {
                         defaults.set(massArr, forKey: "TrainingSet")
                     }
                 }
+                guard let cand = trainingCandidate else {return}
+                guard let given = cand.givenName else {return}
+                let alertController = UIAlertController(title: "Congrats!", message: "Training for \(given) has finished successfully.", preferredStyle: .alert)
                 
-                self.dismiss(animated: true, completion: nil)
+                let action1 = UIAlertAction(title: "Okay", style: .default) { (action:UIAlertAction) in
+                    self.dismiss(animated: true, completion: nil)
+                }
+
+                alertController.addAction(action1)
+                self.present(alertController, animated: true, completion: nil)
             }
             self.countLabel.text = "\(trainingCount)/\(maxCnt)"
         } else {

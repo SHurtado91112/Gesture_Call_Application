@@ -22,7 +22,7 @@ class Util {
     
     static func saveImage(img: UIImage?) {
         print("SAVE ME")
-        return
+//        return
         if let image = img {
             if let data = UIImagePNGRepresentation(image) {
                 let filename = self.getDocumentsDirectory().appendingPathComponent("copy.png")

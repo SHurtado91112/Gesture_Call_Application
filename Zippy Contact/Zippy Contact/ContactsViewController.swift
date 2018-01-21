@@ -90,14 +90,28 @@ class ContactsViewController: UITableViewController {
         let tel = contact.phoneNumbers[0].value.stringValue.removingWhitespaces()
         let candidate = Candidate(given: contact.givenName, fam: contact.familyName, num: tel)
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let vc = storyboard.instantiateViewController(withIdentifier: "CanvasViewController") as? CanvasViewController {
-            vc.trainingCandidate = candidate
-            vc.training = true
-            self.present(vc, animated: true, completion: nil)
+        let alertController = UIAlertController(title: "Ready to train?", message: "If you say yes, you will be taken to a canvas page to write your new gesture for \(contact.givenName).", preferredStyle: .alert)
+        
+        let action1 = UIAlertAction(title: "Yes", style: .default) { (action:UIAlertAction) in
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let vc = storyboard.instantiateViewController(withIdentifier: "CanvasViewController") as? CanvasViewController {
+                vc.trainingCandidate = candidate
+                vc.training = true
+                self.present(vc, animated: true, completion: nil)
+            }
         }
+        
+        let action2 = UIAlertAction(title: "No", style: .default) { (action:UIAlertAction) in
+        }
+        
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+        self.present(alertController, animated: true, completion: nil)
     }
  
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
 
     /*
     // Override to support conditional editing of the table view.
