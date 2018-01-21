@@ -10,7 +10,7 @@ You're driving. You don't have much time to find the person you need to call. Si
 
 # Development
 
-We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in order to learn the swiping motion by keeping track of the coordinates of every few milliseconds. After grabbing all of the phone's stored contacts, the coordinates of 5 similar gestures are passed into the algorithm in order to assign a general swiping motion to a contact. If the user's gesture on the canvas is close enough to a saved swipe, the user would be prompted with an alert in order to proceed with the call.
+We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in order to learn the swiping motion by keeping track of the coordinates of every few milliseconds. After grabbing all of the phone's stored contacts, the coordinates of the gesture will be compared to the 5 similar gestures saved to each contact. If the user's gesture on the canvas is close enough to the five saved swipes on a contact, the user would be prompted with an alert in order to proceed with the call.
 
 # Challenges
 
