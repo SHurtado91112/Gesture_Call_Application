@@ -1,9 +1,9 @@
 version: "Apple Swift version 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2)"
 options: "d3abcef82bff157293d1bc5f4e374479"
-build_time: [1516493670, 373509000]
+build_time: [1516494648, 208969000]
 inputs:
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/ContactCell.swift": [1516491832, 0]
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/CanvasViewController.swift": [1516485024, 0]
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/ContactsViewController.swift": [1516493668, 0]
+  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/ContactCell.swift": [1516494646, 0]
+  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/CanvasViewController.swift": [1516494646, 0]
+  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/ContactsViewController.swift": [1516494646, 0]
   "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/AppDelegate.swift": [1516480954, 0]
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/SettingsViewController.swift": [1516485692, 0]
+  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/Zippy Contact/SettingsViewController.swift": [1516494646, 0]
