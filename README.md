@@ -1,5 +1,7 @@
 # Zippy Contact
 
+![zippy-icon small](https://user-images.githubusercontent.com/11231583/35194495-58322a2c-fe82-11e7-8cec-16a273fe18a1.png)
+
 Zippy Contact will allow you to save time in making a phone call by assigning a unique gesture to listed contacts in your phone.
 
 Made by: Steven Hurtado, Andrei Gurau, Jake Locke
