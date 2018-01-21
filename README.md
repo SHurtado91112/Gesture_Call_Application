@@ -16,3 +16,6 @@ We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in ord
 
 Most of our team haven't been exposed to machine learning algorithms or developed a proper iOS application before. Having to learn, rewrite, and apply the KNN algorithm to our application was certainly a daunting task. TO FINISH LATER
 
+# What's next
+
+Since all of our data is currently stored locally on someone's phone, having multiple saved gestures would consume a lot of space and slow the app down. One way to remedy this issue is to store all the data in order to save space.
