@@ -8,34 +8,95 @@
 
 import UIKit
 
+class Candidate {
+    var givenName : String?
+    var familyName : String?
+    var number : String?
+    
+    init(given: String, fam: String, num: String) {
+        self.givenName = given
+        self.familyName = fam
+        self.number = num
+    }
+}
+
 class CanvasViewController: UIViewController {
 
     private var lastPoint : CGPoint = CGPoint()
+    private var intialPoint : CGPoint = CGPoint()
     private var swiped = false
     @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var backView: UIView!
+    
+    @IBOutlet weak var countLabel: UILabel!
+    @IBOutlet weak var settingsBtn: UIButton!
+    var maxCnt = 10
+    
+    var activityIndicator = UIActivityIndicatorView()
+    
+    //per type
+    var training = false
+    var trainingCount = 1
+    var trainingCandidate : Candidate?
+    var trainingSet : [[CGPoint]] = []
+    @IBOutlet weak var closeBtn: UIButton!
+    
+    private var localPoints : [CGPoint] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setUpView()
+        
+        //use to clear data
+//        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+//        UserDefaults.standard.synchronize()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func setUpView() {
+        self.navigationController?.isNavigationBarHidden = true
+        
+        countLabel.isHidden = !training
+        closeBtn.isHidden = !training
+        settingsBtn.isHidden = training
+        
+        if training {
+            self.countLabel.text = "\(trainingCount)/\(maxCnt)"
+        }
+        
+        self.backView.layer.shadowColor = UIColor.black.cgColor
+        self.backView.layer.shadowOpacity = 0.48
+        self.backView.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+        self.backView.layer.shadowRadius = 10
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         swiped = false
         if let touch = touches.first {
-            self.lastPoint = touch.location(in: self.view)
+            self.lastPoint = touch.location(in: self.imgView)
+            self.intialPoint = self.lastPoint
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
         }
     }
     
     func drawLines(from: CGPoint, to: CGPoint) {
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        self.imgView.image?.draw(in: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        UIGraphicsBeginImageContext(self.imgView.frame.size)
+        self.imgView.image?.draw(in: CGRect(x: 0, y: 0, width: self.imgView.frame.width, height: self.imgView.frame.height))
         if let context = UIGraphicsGetCurrentContext() {
             context.move(to: CGPoint(x: from.x, y: from.y))
             context.addLine(to: CGPoint(x: to.x, y: to.y))
             
             context.setBlendMode(.colorBurn)
             context.setLineCap(.round)
-            context.setLineWidth(4.8)
-            context.setStrokeColor(UIColor(red: 164.0/255.0, green: 176.0/255.0, blue: 245.0/255.0, alpha: 1.0).cgColor)
+            context.setLineWidth(14.8)
+            
+            let color = UIColor(red: 164.0/255.0, green: 176.0/255.0, blue: 245.0/255.0, alpha: 1.0).cgColor
+            context.setStrokeColor(color)
+            
+            context.setShadow(offset: CGSize.zero, blur: 10, color: color)
             context.strokePath()
             
             self.imgView.image = UIGraphicsGetImageFromCurrentImageContext()
@@ -46,15 +107,101 @@ class CanvasViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = true
         if let touch = touches.first {
-            var currentPoint = touch.location(in: self.view)
+            let currentPoint = touch.location(in: self.imgView)
             drawLines(from: self.lastPoint, to: currentPoint)
             self.lastPoint = currentPoint
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             drawLines(from: lastPoint, to: lastPoint)
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
+        }
+        
+//        Util.saveImage(img: self.imgView.image)
+        let defaults = UserDefaults.standard
+        print("Local: \(self.localPoints)\n")
+        if training {
+            trainingCount = trainingCount + 1
+            self.trainingSet.append(self.localPoints)
+            
+            if(trainingCount - 1 == maxCnt) {
+                
+                // add to default
+                if let candidate = trainingCandidate, let given = candidate.givenName,
+                    let fam = candidate.familyName, let num = candidate.number {
+                    let key = "\(given) \(fam)"
+                    
+                    //individual
+                    let encodedData = NSKeyedArchiver.archivedData(withRootObject: self.trainingSet)
+                    defaults.set(encodedData, forKey: "\(key) Set")
+                    defaults.set(num, forKey: "\(key) Number")
+                
+                    //mass
+                    if var massArr = defaults.object(forKey: "TrainingSet") as? [String] {
+                        massArr.append(key)
+                        defaults.set(massArr, forKey: "TrainingSet")
+                    } // not there lets create
+                    else {
+                        var massArr : [String] = []
+                        massArr.append(key)
+                        defaults.set(massArr, forKey: "TrainingSet")
+                    }
+                }
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+            self.countLabel.text = "\(trainingCount)/\(maxCnt)"
+        } else {
+            activityIndicator.startAnimating()
+            
+            //get entire training set
+            if let massArr = defaults.object(forKey: "TrainingSet") as? [String] {
+                print("\nMASS: \(massArr)\n")
+                
+                //use our local points to compare
+                let decision = Algo.KNN(x: massArr, userInput: self.localPoints)
+                //with decision, if valid call contact
+                if let tel = defaults.object(forKey: "\(decision) Number") as? String {
+                    self.contact(tel: tel)
+                }
+
+//                for key in massArr {
+//                    if let decoded = defaults.object(forKey: "\(key) Set") as? Data, let set = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [[CGPoint]] {
+//                        print("SET: \(set)")
+//                    }
+//                }
+            }
+        }
+        
+        self.localPoints = []
+        self.clearCanvas()
+        activityIndicator.stopAnimating()
+    }
+    
+    func clearCanvas() {
+        self.imgView.alpha = 1.0
+        UIView.animate(withDuration: 0.48, animations: {
+            self.imgView.alpha = 0.0
+        }) { (end) in
+            self.imgView.image = UIImage()
+            UIView.animate(withDuration: 0.48, animations: {
+                self.imgView.alpha = 1.0
+            })
+        }
+    }
+    
+    @IBAction func closeTraining(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func contact(tel: String) {
+        print("tried to call : \(tel)")
+        if let url = URL(string: "tel://\(tel)") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            print(url)
         }
     }
     
