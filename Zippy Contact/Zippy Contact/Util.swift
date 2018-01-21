@@ -31,5 +31,16 @@ class Util {
             }
         }
     }
-    
+}
+
+extension String {
+    func removingWhitespaces() -> String {
+        return components(separatedBy: .whitespaces).joined()
+    }
+}
+
+class Algo {
+//    static func kthNearestNeighbor(trainingSet : [[CGPoint]], ) {
+//
+//    }
 }

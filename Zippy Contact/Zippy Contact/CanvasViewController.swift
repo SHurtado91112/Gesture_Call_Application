@@ -8,6 +8,27 @@
 
 import UIKit
 
+class Candidate {
+    var givenName : String?
+    var familyName : String?
+    var number : String?
+    
+    init(given: String, fam: String, num: String) {
+        self.givenName = given
+        self.familyName = fam
+        self.number = num
+    }
+    
+    func contact() {
+        guard let tel = self.number else {return}
+        print("tried to call : \(tel)")
+        if let url = URL(string: "tel://\(tel)") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            print(url)
+        }
+    }
+}
+
 class CanvasViewController: UIViewController {
 
     private var lastPoint : CGPoint = CGPoint()
@@ -16,19 +37,45 @@ class CanvasViewController: UIViewController {
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var backView: UIView!
     
+    @IBOutlet weak var countLabel: UILabel!
+    @IBOutlet weak var settingsBtn: UIButton!
+    
+    var activityIndicator = UIActivityIndicatorView()
+    
+    //per type
+    var training = false
+    var trainingCount = 1
+    var trainingCandidate : Candidate?
+    var trainingSet : [[CGPoint]] = []
+    @IBOutlet weak var closeBtn: UIButton!
+    
     private var localPoints : [CGPoint] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setUpView()
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     func setUpView() {
+        self.navigationController?.isNavigationBarHidden = true
+        
+        countLabel.isHidden = !training
+        closeBtn.isHidden = !training
+        settingsBtn.isHidden = training
+        
+        if training {
+            self.countLabel.text = "\(trainingCount)/5"
+        }
+        
         self.backView.layer.shadowColor = UIColor.black.cgColor
         self.backView.layer.shadowOpacity = 0.48
         self.backView.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
         self.backView.layer.shadowRadius = 10
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -65,7 +112,7 @@ class CanvasViewController: UIViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.swiped = true
         if let touch = touches.first {
-            var currentPoint = touch.location(in: self.imgView)
+            let currentPoint = touch.location(in: self.imgView)
             drawLines(from: self.lastPoint, to: currentPoint)
             self.lastPoint = currentPoint
             self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
@@ -79,7 +126,44 @@ class CanvasViewController: UIViewController {
         }
         
 //        Util.saveImage(img: self.imgView.image)
-        print("\(self.localPoints)\n")
+        let defaults = UserDefaults.standard
+        print("Local: \(self.localPoints)\n")
+        if training {
+            trainingCount = trainingCount + 1
+            self.trainingSet.append(self.localPoints)
+            
+            if(trainingCount - 1 == 5) {
+//                activityIndicator.startAnimating()
+                
+                // add to default
+                if let candidate = trainingCandidate, let given = candidate.givenName,
+                    let fam = candidate.familyName, let num = candidate.number {
+                    let key = "\(given) \(fam)"
+                    
+                    //individual
+                    defaults.set(self.trainingSet, forKey: "\(key) Set")
+                    defaults.set(num, forKey: "\(key) Number")
+                    
+                    //mass
+                    var massArr = defaults.object(forKey: "TrainingSet") as? [[[CGPoint]]] ?? [[[CGPoint]]]()
+                    
+                    massArr.append(self.trainingSet)
+                    defaults.set(massArr, forKey: "TrainingSet")
+                }
+                
+                self.dismiss(animated: true, completion: nil)
+            }
+            self.countLabel.text = "\(trainingCount)/5"
+        } else {
+            //get entire training set
+            var massArr = defaults.object(forKey: "TrainingSet") as? [[[CGPoint]]] ?? [[[CGPoint]]]()
+            print("\nMASS: \(massArr)\n")
+            
+            //use our local points to compare
+            
+            //with decision, if valid call contact
+        }
+        
         self.localPoints = []
         self.clearCanvas()
     }
@@ -94,6 +178,10 @@ class CanvasViewController: UIViewController {
                 self.imgView.alpha = 1.0
             })
         }
+    }
+    
+    @IBAction func closeTraining(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
