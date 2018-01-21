@@ -2,6 +2,8 @@
 
 Zippy Contact will allow you to save time in making a phone call by assigning a unique gesture to listed contacts in your phone.
 
+Made by: Steven Hurtado, Andrei Gurau, Jake Locke
+
 # Inspiration
 
 You're driving. You don't have much time to find the person you need to call. Siri is hard of hearing again... Instead of having to sift through hundreds of contacts to make a phone call or by having to search through the contacts list by typing a name, one could save time and prevent an accident from occuring by simply performing a swiping motion on our canvas to be able to immediately make a call. Quick phone calls are now made much more accessible and personable by adding flair to a contact rather than using their phone number. 
@@ -14,10 +16,3 @@ We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in ord
 
 Most of our team haven't been exposed to machine learning algorithms or developed a proper iOS application before. Having to learn, rewrite, and apply the KNN algorithm to our application was certainly a daunting task. TO FINISH LATER
 
-# Team
-
-Steven Hurtado
-
-Jake Locke
-
-Andrei Gurau
