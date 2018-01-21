@@ -1,6 +1,0 @@
-version: "Apple Swift version 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2)"
-options: "dc2cef2a52f88ea35fa1dadd883fc301"
-build_time: [1516478959, 321004000]
-inputs:
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/ViewController.swift": [1516478949, 0]
-  "/Users/andreigurau/Desktop/Xcodeapps/Zippy Contact/Zippy Contact/AppDelegate.swift": [1516424289, 0]
