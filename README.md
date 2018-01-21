@@ -16,8 +16,12 @@ We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in ord
 
 # Challenges
 
-Most of our team haven't been exposed to machine learning algorithms. Also, having to learn, rewrite, and apply the KNN algorithm to our application was certainly a daunting task. TO FINISH LATER
+Most of our team haven't been exposed to machine learning algorithms. Having to learn, rewrite, and apply the KNN algorithm to our application was certainly a daunting task. Furthermore, another challenge that we had was to take the training data and use it real-time instead of having pre-processed data. This created a tradeoff between a reasonable amount of input for the user and having enough training data to optimize the classifier.
 
 # What's next
 
 Since all of our data is currently stored locally on someone's phone, having multiple saved gestures would consume a lot of space and slow the app down. One way to remedy this issue is to store all the data in order to save space.
+
+As of right now, the application is only able to be used to call people but its purposes can be expandable, such as opening another app, unlocking a door, turning on your lights, and much more. We believe that this application's gesture-recognition ability could be used to save time and add convenience to your life. 
+
+Alternatively, the app could utilize motion gestures in order to perform various functions instead of having to use a gesture. 
