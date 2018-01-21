@@ -141,14 +141,20 @@ class CanvasViewController: UIViewController {
                     let key = "\(given) \(fam)"
                     
                     //individual
-                    defaults.set(self.trainingSet, forKey: "\(key) Set")
+                    let encodedData = NSKeyedArchiver.archivedData(withRootObject: self.trainingSet)
+                    defaults.set(encodedData, forKey: "\(key) Set")
                     defaults.set(num, forKey: "\(key) Number")
                     
                     //mass
-                    var massArr = defaults.object(forKey: "TrainingSet") as? [[[CGPoint]]] ?? [[[CGPoint]]]()
-                    
-                    massArr.append(self.trainingSet)
-                    defaults.set(massArr, forKey: "TrainingSet")
+                    if var massArr = defaults.object(forKey: "TrainingSet") as? [String] {
+                        massArr.append(key)
+                        defaults.set(massArr, forKey: "TrainingSet")
+                    } // not there lets create
+                    else {
+                        var massArr : [String] = []
+                        massArr.append(key)
+                        defaults.set(massArr, forKey: "TrainingSet")
+                    }
                 }
                 
                 self.dismiss(animated: true, completion: nil)
@@ -156,8 +162,15 @@ class CanvasViewController: UIViewController {
             self.countLabel.text = "\(trainingCount)/5"
         } else {
             //get entire training set
-            var massArr = defaults.object(forKey: "TrainingSet") as? [[[CGPoint]]] ?? [[[CGPoint]]]()
-            print("\nMASS: \(massArr)\n")
+            if let massArr = defaults.object(forKey: "TrainingSet") as? [String] {
+                print("\nMASS: \(massArr)\n")
+                
+                for key in massArr {
+                    if let decoded = defaults.object(forKey: "\(key) Set") as? Data, let set = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [[CGPoint]] {
+                        print("SET: \(set)")
+                    }
+                }
+            }
             
             //use our local points to compare
             
