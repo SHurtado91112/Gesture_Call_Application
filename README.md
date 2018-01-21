@@ -13,3 +13,9 @@ We used Swift to build an iOS app using the k-Nearest-Neighbors algorithm in ord
 # Challenges
 
 Most of our team haven't been exposed to machine learning algorithms or developed a proper iOS application before. Having to learn, rewrite, and apply the KNN algorithm to our application was certainly a daunting task. TO FINISH LATER
+
+# Team
+
+Steven Hurtado
+Jake Locke
+Andrei Gurau
