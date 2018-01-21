@@ -144,7 +144,7 @@ class CanvasViewController: UIViewController {
                     let encodedData = NSKeyedArchiver.archivedData(withRootObject: self.trainingSet)
                     defaults.set(encodedData, forKey: "\(key) Set")
                     defaults.set(num, forKey: "\(key) Number")
-                    
+                
                     //mass
                     if var massArr = defaults.object(forKey: "TrainingSet") as? [String] {
                         massArr.append(key)
