@@ -18,15 +18,6 @@ class Candidate {
         self.familyName = fam
         self.number = num
     }
-    
-    func contact() {
-        guard let tel = self.number else {return}
-        print("tried to call : \(tel)")
-        if let url = URL(string: "tel://\(tel)") {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            print(url)
-        }
-    }
 }
 
 class CanvasViewController: UIViewController {
@@ -39,6 +30,7 @@ class CanvasViewController: UIViewController {
     
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var settingsBtn: UIButton!
+    var maxCnt = 10
     
     var activityIndicator = UIActivityIndicatorView()
     
@@ -55,6 +47,9 @@ class CanvasViewController: UIViewController {
         super.viewDidLoad()
         self.setUpView()
         
+        //use to clear data
+//        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+//        UserDefaults.standard.synchronize()
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -66,7 +61,7 @@ class CanvasViewController: UIViewController {
         settingsBtn.isHidden = training
         
         if training {
-            self.countLabel.text = "\(trainingCount)/5"
+            self.countLabel.text = "\(trainingCount)/\(maxCnt)"
         }
         
         self.backView.layer.shadowColor = UIColor.black.cgColor
@@ -132,8 +127,7 @@ class CanvasViewController: UIViewController {
             trainingCount = trainingCount + 1
             self.trainingSet.append(self.localPoints)
             
-            if(trainingCount - 1 == 5) {
-//                activityIndicator.startAnimating()
+            if(trainingCount - 1 == maxCnt) {
                 
                 // add to default
                 if let candidate = trainingCandidate, let given = candidate.givenName,
@@ -159,26 +153,32 @@ class CanvasViewController: UIViewController {
                 
                 self.dismiss(animated: true, completion: nil)
             }
-            self.countLabel.text = "\(trainingCount)/5"
+            self.countLabel.text = "\(trainingCount)/\(maxCnt)"
         } else {
+            activityIndicator.startAnimating()
+            
             //get entire training set
             if let massArr = defaults.object(forKey: "TrainingSet") as? [String] {
                 print("\nMASS: \(massArr)\n")
                 
-                for key in massArr {
-                    if let decoded = defaults.object(forKey: "\(key) Set") as? Data, let set = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [[CGPoint]] {
-                        print("SET: \(set)")
-                    }
+                //use our local points to compare
+                let decision = Algo.KNN(x: massArr, userInput: self.localPoints)
+                //with decision, if valid call contact
+                if let tel = defaults.object(forKey: "\(decision) Number") as? String {
+                    self.contact(tel: tel)
                 }
+
+//                for key in massArr {
+//                    if let decoded = defaults.object(forKey: "\(key) Set") as? Data, let set = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? [[CGPoint]] {
+//                        print("SET: \(set)")
+//                    }
+//                }
             }
-            
-            //use our local points to compare
-            
-            //with decision, if valid call contact
         }
         
         self.localPoints = []
         self.clearCanvas()
+        activityIndicator.stopAnimating()
     }
     
     func clearCanvas() {
@@ -195,6 +195,14 @@ class CanvasViewController: UIViewController {
     
     @IBAction func closeTraining(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func contact(tel: String) {
+        print("tried to call : \(tel)")
+        if let url = URL(string: "tel://\(tel)") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            print(url)
+        }
     }
     
     override func didReceiveMemoryWarning() {

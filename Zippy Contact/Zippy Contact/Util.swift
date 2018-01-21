@@ -42,12 +42,9 @@ extension String {
 class Algo {
     
     static func KNN(x : [String], userInput: [CGPoint]) -> String {
-        var training_data = x
-        let test_data: [CGPoint] = userInput
-
+        let training_data = x
         let k: Int = 5
-        var closestKey = kthNearestNeighbor(trainingSet: training_data, testingData: userInput, k: k)
-        return closestKey
+        return kthNearestNeighbor(trainingSet: training_data, testingData: userInput, k: k)
     }
     
     static func calcDistForImage(sets: [[CGPoint]], testingData: [CGPoint]) -> CGFloat {
@@ -64,6 +61,7 @@ class Algo {
                 summed = summed + dist
             }
         }
+        
         return sqrt(summed)
     }
     
@@ -82,7 +80,8 @@ class Algo {
             return a.0 < b.0
         }
         
-        for i in 0...k-1 {
+        let kMost = k < distances.count ? k : distances.count
+        for i in 0...kMost-1 {
             let vote = distances[i].1
             votes.append(vote)
         }
@@ -98,6 +97,7 @@ class Algo {
         var counter : [String: Int] = [:]
         var max = 0
         for predic in predictions {
+            print(predic)
             if let val = counter[predic] {
                 counter[predic] = val + 1
             }
