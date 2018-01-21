@@ -16,6 +16,10 @@ class Util {
         return paths[0]
     }
     
+    static func zeroPoint(point: CGPoint, offset: CGPoint) -> CGPoint {
+        return CGPoint(x: point.x - offset.x, y: point.y - offset.y)
+    }
+    
     static func saveImage(img: UIImage?) {
         print("SAVE ME")
         return

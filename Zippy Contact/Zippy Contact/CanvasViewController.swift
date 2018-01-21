@@ -11,6 +11,7 @@ import UIKit
 class CanvasViewController: UIViewController {
 
     private var lastPoint : CGPoint = CGPoint()
+    private var intialPoint : CGPoint = CGPoint()
     private var swiped = false
     @IBOutlet weak var imgView: UIImageView!
     @IBOutlet weak var backView: UIView!
@@ -34,7 +35,8 @@ class CanvasViewController: UIViewController {
         swiped = false
         if let touch = touches.first {
             self.lastPoint = touch.location(in: self.imgView)
-            self.localPoints.append(self.lastPoint)
+            self.intialPoint = self.lastPoint
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
         }
     }
     
@@ -66,17 +68,19 @@ class CanvasViewController: UIViewController {
             var currentPoint = touch.location(in: self.imgView)
             drawLines(from: self.lastPoint, to: currentPoint)
             self.lastPoint = currentPoint
-            self.localPoints.append(self.lastPoint)
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !swiped {
             drawLines(from: lastPoint, to: lastPoint)
-            self.localPoints.append(self.lastPoint)
+            self.localPoints.append(Util.zeroPoint(point: self.lastPoint, offset: self.intialPoint))
         }
         
-        Util.saveImage(img: self.imgView.image)
+//        Util.saveImage(img: self.imgView.image)
+        print("\(self.localPoints)\n")
+        self.localPoints = []
         self.clearCanvas()
     }
     
